@@ -1,0 +1,107 @@
+@page
+@inject AppDbContext _context
+@using CarRental.Pages
+@using Microsoft.EntityFrameworkCore;
+@model DeletionModel
+@{
+ViewData["Title"] = "Home page";
+<style>
+    .item-list {
+        /*max-height: 400px; !* Adjust height as needed *!*/
+        overflow-y: auto;
+        border: 1px solid #ccc;
+        padding: 10px;
+        margin: 20px 0;
+    }
+
+    .list-item {
+        margin-bottom: 5px;
+        padding: 8px;
+        border-bottom: 1px solid #eee;
+    }
+</style>
+
+<form method="post" asp-action="SaveSelection" id="updateForm">
+    <div class="item-list" style="display: flex; align-items: center; gap: 10px;">
+
+        <label for="itemSelection">Select an Item:</label>
+        <select id="itemSelection" name="selectedItem" size="5" style="width: 33.33vw;">
+            @foreach (var item in Model.Cars)
+            {
+                <div class="list-item">
+                    <option value="@item.CarID">@item.CarType, @item.Model, @item.CurrentHolder</option>
+                </div>
+            }
+        </select>
+
+        <label for="holderInput">Enter new car holder (empty will default to dealership):</label>
+        <input type="text" id="holderInput" name="holderInput" />
+
+    </div>
+
+    <div style="display: flex; align-items: center; gap: 10px;">
+        <button type="button" class="btn btn-primary" name="action" value="update" onclick="updateButtonClicked()">Change car holder</button>
+        <button type="button" class="btn btn-primary" name="action" value="delete" onclick="deleteButtonClicked()">Delete selected car</button>
+    </div>
+    
+</form>
+@* <h1>List of Cars</h1> *@
+@* *@
+@* <div class="scrollable-list"> *@
+@*     @if (Model.Cars != null && Model.Cars.Any()) *@
+@*     { *@
+@*     foreach (var car in Model.Cars) *@
+@*     { *@
+@*     <div class="list-item"> *@
+@*         <strong>@car.CarID</strong>: @car.CarType, @car.Model, @car.CurrentHolder *@
+@*     </div> *@
+@*     } *@
+@*     } *@
+@*     else *@
+@*     { *@
+@*     <p>No cars available.</p> *@
+@*     } *@
+@* </div> *@
+
+<script>
+
+    function deleteButtonClicked() {
+
+        const selectedValue = document.getElementById("itemSelection").value;
+        console.log("deletionInput: " + selectedValue);
+        
+        const form = document.getElementById("updateForm");
+        
+        const actionInput = document.createElement("input");
+        actionInput.type = "hidden";
+        actionInput.name = "action";
+        actionInput.value = "delete";
+
+        form.appendChild(actionInput);
+        form.submit();
+        //_context.Cars.Add(new Car { CarID = context.Cars.OrderByDescending(u => u.CarID).FirstOrDefault().CarID + 1, Model = "Volvo 3", CurrentHolder = "DEALERSHIP", CarType = "Van"});
+
+    }
+
+    function updateButtonClicked() {
+
+        const selectedValue = document.getElementById("itemSelection").value;
+        console.log("deletionInput: " + selectedValue);
+
+        const form = document.getElementById("updateForm");
+
+        const actionInput = document.createElement("input");
+        actionInput.type = "hidden";
+        actionInput.name = "action";
+        actionInput.value = "update";
+
+        form.appendChild(actionInput);
+        form.submit();
+        //_context.Cars.Add(new Car { CarID = context.Cars.OrderByDescending(u => u.CarID).FirstOrDefault().CarID + 1, Model = "Volvo 3", CurrentHolder = "DEALERSHIP", CarType = "Van"});
+
+    }
+</script>
+}
+
+
+

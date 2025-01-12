@@ -1,0 +1,74 @@
+﻿@page
+@inject AppDbContext _context
+@using CarRental.Pages
+@using Microsoft.EntityFrameworkCore;
+@model IndexModel
+@{
+    ViewData["Title"] = "Home page";
+    <style>
+        .scrollable-list {
+            max-height: 400px; /* Adjust height as needed */
+            overflow-y: auto;
+            border: 1px solid #ccc;
+            padding: 10px;
+            margin: 20px 0;
+        }
+
+        .list-item {
+            margin-bottom: 5px;
+            padding: 8px;
+            border-bottom: 1px solid #eee;
+        }
+    </style>
+    
+    <form method="post" asp-action="SaveSelection" id="newCarForm">
+        <div style="display: flex; align-items: center; gap: 10px;">
+
+            <label for="dropdown">Select the car type:</label>
+            <select id="dropdown" name="typeDropdown" class="form-select">
+                <option value="1">Family car</option>
+                <option value="2">Motorbike</option>
+                <option value="3">Lorry</option>
+                <option value="4">Van</option>
+            </select>
+
+            <label for="modelInput">Enter car Model:</label>
+            <input type="text" id="modelInput" name="modelInput" />
+
+            <button type="button" class="btn btn-primary" onclick="addButtonClicked()">Add to database</button>
+        </div>
+
+    </form>
+    <h1>List of Cars</h1>
+
+    <div class="scrollable-list">
+        @if (Model.Cars != null && Model.Cars.Any())
+        {
+            foreach (var car in Model.Cars)
+            {
+                <div class="list-item">
+                    <strong>@car.CarID</strong>: @car.CarType, @car.Model, @car.CurrentHolder 
+                </div>
+            }
+        }
+        else
+        {
+            <p>No cars available.</p>
+        }
+    </div>
+    
+    <script>
+
+        function addButtonClicked() {
+        
+            const selectedValue = document.getElementById("dropdown").value;
+            //console.log("selectedValue: " + selectedValue);
+            document.getElementById("newCarForm").submit();
+            //_context.Cars.Add(new Car { CarID = context.Cars.OrderByDescending(u => u.CarID).FirstOrDefault().CarID + 1, Model = "Volvo 3", CurrentHolder = "DEALERSHIP", CarType = "Van"});
+            
+        }
+    </script>
+}
+
+
+
