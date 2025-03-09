@@ -40,7 +40,7 @@ namespace CarRental.Pages
         
         public IActionResult OnPost()
         {
-            Console.WriteLine("OnPost start");
+            // Console.WriteLine("OnPost start");
 
             var fullForm = Request.Form;
             
